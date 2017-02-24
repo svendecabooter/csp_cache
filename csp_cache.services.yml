@@ -1,0 +1,4 @@
+services:
+  csp_cache.paragraph_refence:
+    class: Drupal\csp_cache\ParagraphReference
+    arguments: ['@entity_field.manager']

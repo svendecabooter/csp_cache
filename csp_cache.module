@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * Implements hook_entity_build_defaults_alter().
+ */
+function csp_cache_entity_build_defaults_alter(array &$build, \Drupal\Core\Entity\EntityInterface $entity, $view_mode) {
+  // If a node gets updated, other nodes with paragraphs referencing the first
+  // node will have an out-of-date render cache. Add cache tag IDs for the
+  // paragraph-referenced nodes, so this does not happen.
+  // E.g. fixes the issue when a section index node references a page node,
+  // an updated page teaser image is not reflected on the section index.
+  // @TODO: try to improve this.
+  // Drupal.org issue for followup: https://www.drupal.org/node/2855735
+  if ($entity->getEntityTypeId() == "node") {
+    $extra_tags = \Drupal::service('csp_cache.paragraph_refence')->getParagraphCacheTags($entity);
+    if ($extra_tags) {
+      foreach ($extra_tags as $tag) {
+        $build['#cache']['tags'][] = $tag;
+      }
+    }
+  }
+}

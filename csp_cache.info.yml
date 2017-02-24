@@ -1,0 +1,5 @@
+name: 'CSP Cache'
+description: 'Provides additional logic / fixes for CSP caching logic.'
+package: CSP
+type: module
+core: '8.x'
